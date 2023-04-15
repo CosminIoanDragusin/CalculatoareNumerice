@@ -1,0 +1,120 @@
+.MODEL SMALL 
+.STACK 100   
+
+SEG SEGMENT AT 0F000H
+    
+SEG ENDS
+
+.DATA
+  
+   otc_F8 DB 'IMB PS/2 model 80$', 
+   otc_F9 DB 'IMB PC convertibil$', 
+   otc_FA DB 'IMB PS/2 model 30$',
+   otc_FB DB 'PC XT Ext Keyboar, 3.5" drivers$',
+   otc_FC DB 'PC-AT sau PS/2 modelele 50, 60$',
+   otc_FD DB 'IBM PC-JR$',  
+   otc_FE DB 'PC-XT$',
+   otc_FF DB 'IBM-PC$',
+   otc_9A DB 'COMPAQ XT/COMPAQ PLUS',
+   otc_30 DB 'SPERRY PC$',
+   otc_2D DB 'COMPAQ PC/COMPAQ DESKPRO',   
+   otc_df DB 'CN$', 
+      
+.CODE
+ 
+ MOV AX, @DATA
+    MOV DS, AX
+    MOV AX, SEG
+    MOV ES, AX
+
+    MOV DI, 0FFFEH
+    MOV DL, BYTE PTR ES:[DI]
+    switch:
+    CMP DL, 0F8H    
+    JE case1 
+     
+    CMP DL, 0F9H 
+    JE case2  
+    
+    CMP DL, 0FAH    
+    JE case3
+      
+    CMP DL, 0FBH 
+    JE case4 
+     
+    CMP DL, 0FCH 
+    JE case5
+       
+    CMP DL, 0FDH 
+    JE case6 
+    
+    CMP DL, 0FEH 
+    JE case7
+     
+    CMP DL, 0FFH 
+    JE case8      
+            
+    CMP DL, 09AH 
+    JE case9
+    
+    CMP DL, 030H 
+   
+    JE case10
+     
+    CMP DL, 02DH 
+    JE case11  
+    
+    
+    LEA DX, otc_df
+    JMP afis
+    
+case1:
+    LEA DX, otc_F8
+    JMP afis  
+     
+case2:
+    LEA DX, otc_F9
+    JMP afis
+     
+case3:
+    LEA DX, otc_FA
+    JMP afis 
+case4:
+    LEA DX, otc_FB
+    JMP afis 
+
+case5:
+    LEA DX, otc_FC
+    JMP afis 
+
+case6:
+    LEA DX, otc_FD
+    JMP afis
+           
+case7:
+    LEA DX, otc_FE
+    JMP afis
+    
+case8:
+    LEA DX, otc_FF
+    JMP afis  
+
+case9:
+    LEA DX, otc_9A
+    JMP afis
+case10:
+    LEA DX, otc_30
+    JMP afis
+
+case11:
+    LEA DX, otc_2D
+    JMP afis
+
+             
+afis: 
+    MOV AH, 09H
+    INT 21H
+      
+    MOV AX, 4C00h
+    INT 21H
+end
